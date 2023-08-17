@@ -1,0 +1,12 @@
+D:\work\web\GrecoBot\GrecoBot.Core\bin\Debug\net6.0\GrecoBot.Core.deps.json
+D:\work\web\GrecoBot\GrecoBot.Core\bin\Debug\net6.0\GrecoBot.Core.dll
+D:\work\web\GrecoBot\GrecoBot.Core\bin\Debug\net6.0\GrecoBot.Core.pdb
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.csproj.AssemblyReference.cache
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.AssemblyInfoInputs.cache
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.AssemblyInfo.cs
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.csproj.CoreCompileInputs.cache
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.dll
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\refint\GrecoBot.Core.dll
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\GrecoBot.Core.pdb
+D:\work\web\GrecoBot\GrecoBot.Core\obj\Debug\net6.0\ref\GrecoBot.Core.dll

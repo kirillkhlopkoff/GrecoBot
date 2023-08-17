@@ -1,0 +1,14 @@
+D:\work\web\GrecoBot\GrecoBot.Data\bin\Debug\net6.0\GrecoBot.Data.deps.json
+D:\work\web\GrecoBot\GrecoBot.Data\bin\Debug\net6.0\GrecoBot.Data.runtimeconfig.json
+D:\work\web\GrecoBot\GrecoBot.Data\bin\Debug\net6.0\GrecoBot.Data.dll
+D:\work\web\GrecoBot\GrecoBot.Data\bin\Debug\net6.0\GrecoBot.Data.pdb
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.csproj.AssemblyReference.cache
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.AssemblyInfoInputs.cache
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.AssemblyInfo.cs
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.csproj.CoreCompileInputs.cache
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.dll
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\refint\GrecoBot.Data.dll
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.pdb
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\GrecoBot.Data.genruntimeconfig.cache
+D:\work\web\GrecoBot\GrecoBot.Data\obj\Debug\net6.0\ref\GrecoBot.Data.dll
