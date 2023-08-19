@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,7 +30,8 @@ namespace GrecoBot.Core
                 HttpResponseMessage response = await httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, decimal>>>(responseBody);
+                _data= JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, decimal>>>(responseBody);
+                return (_data);
             }
             catch (HttpRequestException ex)
             {
@@ -73,6 +75,7 @@ namespace GrecoBot.Core
                     { "bitcoin", bitcoinData["usd"] },
                     { "ethereum", ethereumData["usd"] },
                     { "litecoin", litecoinData["usd"] },
+                    { "Cardano", cardanoData["usd"] },
 
                     { "Tron", tronData["usd"] },
                     { "Bitcoin cash", bitcoincashData["usd"] },
@@ -96,5 +99,24 @@ namespace GrecoBot.Core
                 return null;
             }
         }
+
+        public decimal GetExchangeRate(string selectedCurrencyPair)
+        {
+            selectedCurrencyPair = WebUtility.UrlDecode(selectedCurrencyPair); // Декодирование пары
+
+            _data = LoadCryptoCurrencyRates().GetAwaiter().GetResult(); // Инициализация _data
+
+            if (_data.TryGetValue(selectedCurrencyPair.Split('/')[0].ToLower(), out var currencyData))
+            {
+                if (currencyData.TryGetValue("usd", out decimal exchangeRate))
+                {
+                    return exchangeRate;
+                }
+            }
+
+            // Если валютная пара или курс обмена не найдены, можно вернуть значение по умолчанию или обработать ошибку
+            return 0;
+        }
+
     }
 }

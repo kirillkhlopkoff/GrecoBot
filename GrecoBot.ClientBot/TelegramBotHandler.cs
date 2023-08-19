@@ -271,15 +271,24 @@ namespace GrecoBot.ClientBot
             }
             else if (message.Text == "👤 Личный кабинет")
             {
-                // Получаем информацию о пользователе из API
-                var userInfo = await _botMethods.GetUserInfoFromApi(message.Chat.Id);
+                // Получаем информацию о пользователе и его транзакциях из API
+                var userInfoWithTransactions = await _botMethods.GetUserInfoFromApi(message.Chat.Id);
 
-                if (userInfo != null)
+                if (userInfoWithTransactions.UserInfo != null)
                 {
-                    // Пользователь найден, отправляем сообщение с информацией о Личном кабинете
+                    // Пользователь найден, создаем сообщение с информацией о Личном кабинете и транзакциях
                     var userMessage = $"👤Добро пожаловать в ваш Личный Кабинет!\n" +
-                                      $"Id: {userInfo.Id}\n" +
-                                      $"Телефон: {userInfo.Phone}";
+                                      $"Id: {userInfoWithTransactions.UserInfo.Id}\n" +
+                                      $"Телефон: {userInfoWithTransactions.UserInfo.Phone}\n\n" +
+                                      "Последние транзакции:\n";
+
+                    foreach (var transaction in userInfoWithTransactions.Transactions)
+                    {
+                        userMessage += $"Транзакция Id: {transaction.TransactionId}\n" +
+                                       $"Пара: {transaction.Pair}\n" +
+                                       $"Сумма: {transaction.Amount}\n" +
+                                       $"Дата и время: {transaction.DateTime}\n\n";
+                    }
 
                     await _client.SendTextMessageAsync(message.Chat.Id, userMessage);
                 }
@@ -300,6 +309,7 @@ namespace GrecoBot.ClientBot
                 if (_userOperations.TryGetValue(message.Chat.Id, out var operationState))
                 {
                     string walletUAH = "4149 6293 5338 5008";
+                    
 
                     switch (operationState.CurrentStep)
                     {
@@ -309,9 +319,20 @@ namespace GrecoBot.ClientBot
                             operationState.Amount = message.Text;
                             operationState.CurrentStep = OperationStep.EnterWallet;
 
+                            var transactionModel = new TransactionDC
+                            {
+                                UserId = message.Chat.Id,
+                                TransactionId = operationState.OperationId,
+                                Pair = changePair,
+                                Amount = operationState.Amount,
+                                DateTime = DateTime.Now,
+                                /*CurrentCourse = "current_course_value" // Здесь укажите актуальное значение курса*/
+                            };
+
                             await client.SendTextMessageAsync(message.Chat.Id, $"Вы хотите купить {message.Text} {selectedTargetCurrency} \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{walletUAH} \nследующую сумму:");
                             // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
                             await _currentCourse.CalculateAmountInUSD(message.Chat.Id, operationState.Amount, changePair, "uah");
+                            await _botMethods.CreateTransactionInApi(transactionModel);
                             operationState.OrderAmount = message.Text;
                             break;
 

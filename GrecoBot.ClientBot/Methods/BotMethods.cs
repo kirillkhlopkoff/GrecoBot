@@ -46,18 +46,33 @@ namespace GrecoBot.ClientBot.Methods
             }
         }
 
-        public async Task<UserDC> GetUserInfoFromApi(long userId)
+        public async Task<(UserDC UserInfo, List<TransactionInfoDC> Transactions)> GetUserInfoFromApi(long userId)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7135/api/Bot/user-info/{userId}");
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync($"https://localhost:7135/api/Bot/user-info/{userId}");
+                    response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
-            var userInfo = JsonConvert.DeserializeObject<UserDC>(content);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeAnonymousType(responseContent, new
+                    {
+                        UserInfo = new UserDC(),
+                        Transactions = new List<TransactionInfoDC>()
+                    });
 
-            return userInfo;
+                    return (result.UserInfo, result.Transactions);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return (null, null);
+            }
         }
 
-        private async Task<string> CreateTransactionInApi(TransactionDC transactionModel)
+        public async Task<string> CreateTransactionInApi(TransactionDC transactionModel)
         {
             try
             {

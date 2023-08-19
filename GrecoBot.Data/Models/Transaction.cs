@@ -11,9 +11,9 @@ namespace GrecoBot.Data.Models
     {
         [ForeignKey("User")]
         public long UserId { get; set; }
-        public Guid TransactionId { get; set; }
+        public string TransactionId { get; set; }
         public string Pair { get; set; }
-        public decimal Amount { get; set; }
+        public string Amount { get; set; }
         public DateTime DateTime { get; set; }
         public string CurrentCourse { get; set; }
         public User User { get; set; }

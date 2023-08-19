@@ -63,7 +63,20 @@ namespace GrecoBot.API.Controllers
                         Phone = user.Phone
                     };
 
-                    return Ok(userInfo);
+                    var transactions = await _dbContext.Transactions
+                        .Where(t => t.UserId == userId)
+                        .OrderByDescending(t => t.DateTime)
+                        .Take(10)
+                        .Select(t => new TransactionInfoDC
+                        {
+                            TransactionId = t.TransactionId.ToString(),
+                            Pair = t.Pair,
+                            Amount = t.Amount,
+                            DateTime = t.DateTime.AddHours(3)
+                        })
+                        .ToListAsync();
+
+                    return Ok(new { UserInfo = userInfo, Transactions = transactions });
                 }
                 else
                 {
@@ -100,6 +113,22 @@ namespace GrecoBot.API.Controllers
             }
         }
 
+        [HttpGet("current-course/{pair}")]
+        public IActionResult GetCurrentCourse(string pair)
+        {
+            var ratesProvider = new CurrencyRatesProvider();
+            var exchangeRate = ratesProvider.GetExchangeRate(pair);
+
+            if (exchangeRate > 0)
+            {
+                return Ok($"Current exchange rate for {pair}: {exchangeRate:F2}");
+            }
+            else
+            {
+                return NotFound("Exchange rate not found for the specified pair.");
+            }
+        }
+
         [HttpPost("create-transaction")]
         public async Task<IActionResult> CreateTransaction([FromBody] TransactionDC transactionModel)
         {
@@ -116,20 +145,30 @@ namespace GrecoBot.API.Controllers
                     return NotFound("User not found.");
                 }
 
-                var transaction = new Transaction
+                var ratesProvider = new CurrencyRatesProvider();
+                var currentCourse = ratesProvider.GetExchangeRate(transactionModel.Pair); // Получение курса автоматически
+
+                if (currentCourse > 0)
                 {
-                    UserId = transactionModel.UserId,
-                    TransactionId = transactionModel.TransactionId,
-                    Pair = transactionModel.Pair,
-                    Amount = transactionModel.Amount,
-                    DateTime = transactionModel.DateTime,
-                    CurrentCourse = transactionModel.CurrentCourse
-                };
+                    var transaction = new Transaction
+                    {
+                        UserId = transactionModel.UserId,
+                        TransactionId = transactionModel.TransactionId,
+                        Pair = transactionModel.Pair,
+                        Amount = transactionModel.Amount,
+                        DateTime = transactionModel.DateTime,
+                        CurrentCourse = currentCourse.ToString("F2") // Форматируем курс с двумя знаками после запятой
+                    };
 
-                _dbContext.Transactions.Add(transaction);
-                await _dbContext.SaveChangesAsync();
+                    _dbContext.Transactions.Add(transaction);
+                    await _dbContext.SaveChangesAsync();
 
-                return Ok("Transaction created successfully.");
+                    return Ok("Transaction created successfully.");
+                }
+                else
+                {
+                    return BadRequest("Unable to fetch current course for the specified pair.");
+                }
             }
             catch (Exception ex)
             {

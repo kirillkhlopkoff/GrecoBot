@@ -97,8 +97,8 @@ namespace GrecoBot.ClientBot
                 {
                     string rates = $"Курсы криптовалют:\n" +
                                    $"Tether (USDT): ${tetherData["usd"]}\n" +
-                                   $"Биткоин (BTC): ${bitcoinData["usd"]}\n" +
-                                   $"Эфириум (ETH): ${ethereumData["usd"]}\n" +
+                                   $"Bitcoin (BTC): ${bitcoinData["usd"]}\n" +
+                                   $"Ethereum (ETH): ${ethereumData["usd"]}\n" +
                                    $"Litecoin (LTC): ${litecoinData["usd"]}\n" +
                                    /*$"Cardano (ADA): ${cardanoData["usd"]}\n" +*/
                                    $"Tron (TRX): ${tronData["usd"]}\n" +
