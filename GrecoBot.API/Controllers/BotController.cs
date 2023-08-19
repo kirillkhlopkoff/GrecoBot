@@ -100,7 +100,44 @@ namespace GrecoBot.API.Controllers
             }
         }
 
-        [HttpGet("calculate-in-usd")]
+        [HttpPost("create-transaction")]
+        public async Task<IActionResult> CreateTransaction([FromBody] TransactionDC transactionModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            try
+            {
+                var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == transactionModel.UserId);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                var transaction = new Transaction
+                {
+                    UserId = transactionModel.UserId,
+                    TransactionId = transactionModel.TransactionId,
+                    Pair = transactionModel.Pair,
+                    Amount = transactionModel.Amount,
+                    DateTime = transactionModel.DateTime,
+                    CurrentCourse = transactionModel.CurrentCourse
+                };
+
+                _dbContext.Transactions.Add(transaction);
+                await _dbContext.SaveChangesAsync();
+
+                return Ok("Transaction created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        /*[HttpGet("calculate-in-usd")]
         public async Task<IActionResult> CalculateInUSD(string currency, decimal amount)
         {
             try
@@ -144,6 +181,6 @@ namespace GrecoBot.API.Controllers
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
-        }
+        }*/
     }
 }

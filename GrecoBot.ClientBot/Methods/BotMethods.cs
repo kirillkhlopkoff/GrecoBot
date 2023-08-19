@@ -57,6 +57,28 @@ namespace GrecoBot.ClientBot.Methods
             return userInfo;
         }
 
+        private async Task<string> CreateTransactionInApi(TransactionDC transactionModel)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var json = JsonConvert.SerializeObject(transactionModel);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = await httpClient.PostAsync("https://localhost:7135/api/Bot/create-transaction", content);
+                    response.EnsureSuccessStatusCode();
+
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return responseContent;
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"An error occurred: {ex.Message}";
+            }
+        }
+
         public async Task<decimal> CalculateAmountInUSD(string currency, decimal amount)
         {
             var rates = await _ratesProvider.GetCryptoCurrencyRates();

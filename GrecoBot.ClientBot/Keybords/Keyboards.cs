@@ -15,7 +15,8 @@ namespace GrecoBot.ClientBot.Keybords
             {
             new KeyboardButton[] { new KeyboardButton("💶 Обменять"), new KeyboardButton("👤 Личный кабинет") },
             new KeyboardButton[] { new KeyboardButton("💬 Сообщество"), new KeyboardButton("📞 Поддержка") },
-            new KeyboardButton[] { new KeyboardButton("⚖️ Текущий курс"), new KeyboardButton("✅ Регистрация") }
+            new KeyboardButton[] { new KeyboardButton("⚖️ Текущий курс"), new KeyboardButton("✅ Регистрация") },
+            new KeyboardButton[] { new KeyboardButton("📖 Оферта") }
         })
             {
                 ResizeKeyboard = true
@@ -34,15 +35,18 @@ namespace GrecoBot.ClientBot.Keybords
         new[] { "ETH" }
     };
 
-            var convertedCryptoCurrencies = cryptoCurrencies.Select(row => row.Select(currency => ConvertCurrencyName(currency)));
+            /*var convertedCryptoCurrencies = cryptoCurrencies.Select(row => row.Select(currency => ConvertCurrencyName(currency)));*/
 
-            var inlineKeyboard = new InlineKeyboardMarkup(convertedCryptoCurrencies
+            /*var inlineKeyboard = new InlineKeyboardMarkup(convertedCryptoCurrencies
+                .Select(row => row.Select(currency => InlineKeyboardButton.WithCallbackData(currency, $"select_base_{currency}")))
+            );*/
+            var inlineKeyboard = new InlineKeyboardMarkup(cryptoCurrencies
                 .Select(row => row.Select(currency => InlineKeyboardButton.WithCallbackData(currency, $"select_base_{currency}")))
             );
 
             return inlineKeyboard;
         }
-        private static string ConvertCurrencyName(string currency)
+        /*private static string ConvertCurrencyName(string currency)
         {
             switch (currency)
             {
@@ -69,7 +73,7 @@ namespace GrecoBot.ClientBot.Keybords
                 case "ETH": return "tether";
                 default: return currency.ToLower();
             }
-        }
+        }*/
 
         public static InlineKeyboardMarkup CreateAmountInputMethodKeyboard(string selectedCurrency)
         {
