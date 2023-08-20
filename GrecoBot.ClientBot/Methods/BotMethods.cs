@@ -31,7 +31,7 @@ namespace GrecoBot.ClientBot.Methods
                 var content = new StringContent(jsonUser, Encoding.UTF8, "application/json");
 
                 // Отправляем POST-запрос на метод регистрации
-                var response = await _httpClient.PostAsync("https://localhost:7135/api/Bot/register", content);
+                var response = await _httpClient.PostAsync("https://localhost:7135/api/main/register", content);
 
                 response.EnsureSuccessStatusCode();
 
@@ -52,7 +52,7 @@ namespace GrecoBot.ClientBot.Methods
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.GetAsync($"https://localhost:7135/api/Bot/user-info/{userId}");
+                    var response = await httpClient.GetAsync($"https://localhost:7135/api/main/user-info/{userId}");
                     response.EnsureSuccessStatusCode();
 
                     var responseContent = await response.Content.ReadAsStringAsync();
@@ -81,7 +81,7 @@ namespace GrecoBot.ClientBot.Methods
                     var json = JsonConvert.SerializeObject(transactionModel);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var response = await httpClient.PostAsync("https://localhost:7135/api/Bot/create-transaction", content);
+                    var response = await httpClient.PostAsync("https://localhost:7135/api/main/create-transaction", content);
                     response.EnsureSuccessStatusCode();
 
                     var responseContent = await response.Content.ReadAsStringAsync();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrecoBot.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace GrecoBot.DC
     {
         public string TransactionId { get; set; }
         public string Pair { get; set; }
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
         public DateTime DateTime { get; set; }
+        public StatusTransaction StatusTransaction { get; set; }
     }
 }

@@ -1,0 +1,29 @@
+﻿@model List<GrecoBot.DC.TransactionDC>
+
+<h2>All Transactions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Id</th>
+            <th>Transaction Id</th>
+            <th>Pair</th>
+            <th>Amount</th>
+            <th>Transaction Status</th>
+            <th>Date and Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.UserId</td>
+                <td>@transaction.TransactionId</td>
+                <td>@transaction.Pair</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.StatusTransaction</td>
+                <td>@transaction.DateTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

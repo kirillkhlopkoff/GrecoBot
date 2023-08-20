@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.API", "GrecoBot.API\GrecoBot.API.csproj", "{EEDFED5C-C8BC-4CD8-BA57-81131C5CA169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrecoBot.API", "GrecoBot.API\GrecoBot.API.csproj", "{EEDFED5C-C8BC-4CD8-BA57-81131C5CA169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.ClientBot", "GrecoBot.ClientBot\GrecoBot.ClientBot.csproj", "{442EA5F4-2A95-4DE9-9C61-C47B8D17A6F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrecoBot.ClientBot", "GrecoBot.ClientBot\GrecoBot.ClientBot.csproj", "{442EA5F4-2A95-4DE9-9C61-C47B8D17A6F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.Data", "GrecoBot.Data\GrecoBot.Data.csproj", "{9F0F9450-EAA9-4B17-96FB-4BA6C5A4B2E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrecoBot.Data", "GrecoBot.Data\GrecoBot.Data.csproj", "{9F0F9450-EAA9-4B17-96FB-4BA6C5A4B2E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.Core", "GrecoBot.Core\GrecoBot.Core.csproj", "{ED5ED5F1-FF3D-4E3C-840D-46FB1410501C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrecoBot.Core", "GrecoBot.Core\GrecoBot.Core.csproj", "{ED5ED5F1-FF3D-4E3C-840D-46FB1410501C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.DC", "GrecoBot.DC\GrecoBot.DC.csproj", "{509F454E-B213-42D1-A6FB-674CADBEF2F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrecoBot.DC", "GrecoBot.DC\GrecoBot.DC.csproj", "{509F454E-B213-42D1-A6FB-674CADBEF2F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrecoBot.Admin.MVC.Client", "GrecoBot.Admin.MVC.Client\GrecoBot.Admin.MVC.Client.csproj", "{9AD8ECD5-A963-4052-A200-20A2881CB0F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{509F454E-B213-42D1-A6FB-674CADBEF2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{509F454E-B213-42D1-A6FB-674CADBEF2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{509F454E-B213-42D1-A6FB-674CADBEF2F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AD8ECD5-A963-4052-A200-20A2881CB0F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD8ECD5-A963-4052-A200-20A2881CB0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD8ECD5-A963-4052-A200-20A2881CB0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD8ECD5-A963-4052-A200-20A2881CB0F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

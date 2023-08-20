@@ -136,6 +136,9 @@
               },
               "D:\\work\\web\\GrecoBot\\GrecoBot.Core\\GrecoBot.Core.csproj": {
                 "projectPath": "D:\\work\\web\\GrecoBot\\GrecoBot.Core\\GrecoBot.Core.csproj"
+              },
+              "D:\\work\\web\\GrecoBot\\GrecoBot.DC\\GrecoBot.DC.csproj": {
+                "projectPath": "D:\\work\\web\\GrecoBot\\GrecoBot.DC\\GrecoBot.DC.csproj"
               }
             }
           }
@@ -357,7 +360,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\work\\web\\GrecoBot\\GrecoBot.Data\\GrecoBot.Data.csproj": {
+                "projectPath": "D:\\work\\web\\GrecoBot\\GrecoBot.Data\\GrecoBot.Data.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

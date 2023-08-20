@@ -13,7 +13,7 @@ namespace GrecoBot.ClientBot
         public string SelectedTargetCurrency { get; set; }
         public string OperationId { get; set; }
         public OperationStep CurrentStep { get; set; }
-        public string Amount { get; set; } // Добавляем новое свойство Amount
+        public decimal Amount { get; set; } // Добавляем новое свойство Amount
         public string Wallet { get; set; } // Добавляем новое свойство Wallet
         public string OrderAmount { get; set; }
     }

@@ -348,6 +348,9 @@
         }
       },
       "GrecoBot.DC/1.0.0": {
+        "dependencies": {
+          "GrecoBot.Data": "1.0.0"
+        },
         "runtime": {
           "GrecoBot.DC.dll": {}
         }

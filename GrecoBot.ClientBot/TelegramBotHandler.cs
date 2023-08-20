@@ -287,7 +287,8 @@ namespace GrecoBot.ClientBot
                         userMessage += $"Транзакция Id: {transaction.TransactionId}\n" +
                                        $"Пара: {transaction.Pair}\n" +
                                        $"Сумма: {transaction.Amount}\n" +
-                                       $"Дата и время: {transaction.DateTime}\n\n";
+                                       $"Дата и время: {transaction.DateTime}\n"+
+                                       $"Статус: {transaction.StatusTransaction}\n\n";
                     }
 
                     await _client.SendTextMessageAsync(message.Chat.Id, userMessage);
@@ -316,7 +317,7 @@ namespace GrecoBot.ClientBot
 
                         case OperationStep.EnterAmount:
                             // Код обработки суммы, например, вы можете сохранить сумму в operationState и перейти к следующему шагу:
-                            operationState.Amount = message.Text;
+                            operationState.Amount = decimal.Parse( message.Text);
                             operationState.CurrentStep = OperationStep.EnterWallet;
 
                             var transactionModel = new TransactionDC
@@ -331,7 +332,7 @@ namespace GrecoBot.ClientBot
 
                             await client.SendTextMessageAsync(message.Chat.Id, $"Вы хотите купить {message.Text} {selectedTargetCurrency} \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{walletUAH} \nследующую сумму:");
                             // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
-                            await _currentCourse.CalculateAmountInUSD(message.Chat.Id, operationState.Amount, changePair, "uah");
+                            await _currentCourse.CalculateAmountInUSD(message.Chat.Id, message.Text, changePair, "uah");
                             await _botMethods.CreateTransactionInApi(transactionModel);
                             operationState.OrderAmount = message.Text;
                             break;

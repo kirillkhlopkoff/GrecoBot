@@ -27,9 +27,8 @@ namespace GrecoBot.Data.Migrations
                     b.Property<string>("TransactionId")
                         .HasColumnType("text");
 
-                    b.Property<string>("Amount")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("CurrentCourse")
                         .IsRequired()
@@ -41,6 +40,9 @@ namespace GrecoBot.Data.Migrations
                     b.Property<string>("Pair")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("StatusTransaction")
+                        .HasColumnType("integer");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");

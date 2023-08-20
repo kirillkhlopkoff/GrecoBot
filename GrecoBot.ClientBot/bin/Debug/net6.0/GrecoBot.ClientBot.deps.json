@@ -10,6 +10,7 @@
         "dependencies": {
           "GrecoBot.API": "1.0.0",
           "GrecoBot.Core": "1.0.0",
+          "GrecoBot.DC": "1.0.0",
           "Newtonsoft.Json": "13.0.3",
           "Telegram.Bot": "19.0.0",
           "Telegram.Bots.Extensions.Polling": "5.9.0"
@@ -528,6 +529,9 @@
         }
       },
       "GrecoBot.DC/1.0.0": {
+        "dependencies": {
+          "GrecoBot.Data": "1.0.0"
+        },
         "runtime": {
           "GrecoBot.DC.dll": {}
         }

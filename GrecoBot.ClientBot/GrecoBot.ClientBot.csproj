@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GrecoBot.API\GrecoBot.API.csproj" />
     <ProjectReference Include="..\GrecoBot.Core\GrecoBot.Core.csproj" />
+    <ProjectReference Include="..\GrecoBot.DC\GrecoBot.DC.csproj" />
   </ItemGroup>
 
 </Project>
