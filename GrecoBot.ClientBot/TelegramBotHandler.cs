@@ -7,7 +7,9 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -28,6 +30,7 @@ namespace GrecoBot.ClientBot
 
         static string changePair;
         static string selectedTargetCurrency = string.Empty;
+        static string TargetCrypto;
 
         public static TelegramBotClient _client;
         private readonly HttpClient _httpClient;
@@ -67,6 +70,67 @@ namespace GrecoBot.ClientBot
     { "ETH/UAH", "ethereum/usd" },
     // Add other exchange options and corresponding currency pairs here
 };
+
+        public static bool IsValidCryptoWallet(string wallet, string changePair)
+        {
+            switch (changePair.ToLower())
+            {
+                case "tether/usd":
+                    return Regex.IsMatch(wallet, @"^[A-Za-z0-9]{26,35}$");
+
+                case "bitcoin":
+                    return Regex.IsMatch(changePair, @"^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
+
+                case "ethereum":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "litecoin":
+                    return Regex.IsMatch(changePair, @"^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$");
+
+                case "cardano":
+                    return Regex.IsMatch(changePair, @"^[Aa][1-9a-km-zA-HJ-NP-Z]{58}$");
+
+                case "dai":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "tron/usd":
+                    return Regex.IsMatch(changePair, @"^T[a-zA-Z0-9]{33}$");
+
+                case "bitcoin-cash":
+                    return Regex.IsMatch(changePair, @"^bitcoincash:q[a-z0-9]{41}$");
+
+                case "binance-usd":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "tontoken":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "dash":
+                    return Regex.IsMatch(changePair, @"^X[a-km-zA-HJ-NP-Z1-9]{33}$");
+
+                case "verse-bitcoin":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "dogecoin":
+                    return Regex.IsMatch(changePair, @"^D{1}[5-9A-HJ-NP-U]{1}[1-9A-HJ-NP-Za-km-z]{32}$");
+
+                case "matic-network":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "binancecoin":
+                    return Regex.IsMatch(changePair, @"^bnb[a-zA-Z0-9]{38}$");
+
+                case "usd-coin":
+                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
+
+                case "monero":
+                    return Regex.IsMatch(changePair, @"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}$");
+
+                default:
+                    return false;
+            }
+        }
+
 
         public async Task RunBotAsync()
         {
@@ -316,37 +380,73 @@ namespace GrecoBot.ClientBot
                     {
 
                         case OperationStep.EnterAmount:
-                            // Код обработки суммы, например, вы можете сохранить сумму в operationState и перейти к следующему шагу:
-                            operationState.Amount = decimal.Parse( message.Text);
-                            operationState.CurrentStep = OperationStep.EnterWallet;
+                            if (decimal.TryParse(message.Text, out decimal amount))
+                            {
+                                operationState.Amount = amount;
+                                operationState.CurrentStep = OperationStep.EnterWallet;
 
-                            var transactionModel = new TransactionDC
+                                await client.SendTextMessageAsync(message.Chat.Id, $"Вы хотите купить {message.Text} {TargetCrypto} \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{walletUAH} \nследующую сумму:");
+
+                                // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
+                                await _currentCourse.CalculateAmountInUSD(message.Chat.Id, message.Text, changePair, "uah");
+                                operationState.OrderAmount = message.Text;
+                            }
+                            else
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите корректную сумму.");
+                            }
+                            break;
+
+                        case OperationStep.EnterWallet:
+                            // Код обработки кошелька, например, сохранить его в operationState и вывести сообщение "Спасибо, ожидаем ваш платеж":
+                            operationState.Wallet = message.Text;
+                            string walletInput = message.Text;
+                            if (IsValidCryptoWallet(operationState.Wallet, changePair))
+                            {
+                                var transactionModel = new TransactionDC
+                                {
+                                    UserId = message.Chat.Id,
+                                    TransactionId = operationState.OperationId,
+                                    Pair = changePair,
+                                    Amount = operationState.Amount,
+                                    DateTime = DateTime.Now,
+                                };
+
+                                await _botMethods.CreateTransactionInApi(transactionModel); // Создаем транзакцию в базе данных
+
+                                _userOperations.Remove(message.Chat.Id); // Удаляем состояние операции после завершения операции
+                                await client.SendTextMessageAsync(message.Chat.Id, "Спасибо, ожидаем ваш платеж. \nПосле отправки перешлите в бот скриншот платежа.");
+                                // ID чата, куда нужно переслать фото (в данном случае ID технического чата)
+                                long technicalChatId = 6642646501; // Замените на реальный ID вашего технического чата
+                                string order = $"Заявка {operationState.OperationId} \nКошелек-{message.Text} \nСумма: {operationState.OrderAmount}{changePair}";
+                                // Пересылаем фото в технический чат
+                                await client.SendTextMessageAsync(technicalChatId, $"{order}");
+                            }
+                            else
+                            {
+                                // Выводим сообщение о некорректном формате кошелька
+                                await client.SendTextMessageAsync(message.Chat.Id, "Некорректный формат крипто-кошелька. Пожалуйста, введите корректный кошелек.");
+                            }
+
+
+                            /*var transactionModel = new TransactionDC
                             {
                                 UserId = message.Chat.Id,
                                 TransactionId = operationState.OperationId,
                                 Pair = changePair,
                                 Amount = operationState.Amount,
                                 DateTime = DateTime.Now,
-                                /*CurrentCourse = "current_course_value" // Здесь укажите актуальное значение курса*/
                             };
 
-                            await client.SendTextMessageAsync(message.Chat.Id, $"Вы хотите купить {message.Text} {selectedTargetCurrency} \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{walletUAH} \nследующую сумму:");
-                            // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
-                            await _currentCourse.CalculateAmountInUSD(message.Chat.Id, message.Text, changePair, "uah");
-                            await _botMethods.CreateTransactionInApi(transactionModel);
-                            operationState.OrderAmount = message.Text;
-                            break;
+                            await _botMethods.CreateTransactionInApi(transactionModel); // Создаем транзакцию в базе данных
 
-                        case OperationStep.EnterWallet:
-                            // Код обработки кошелька, например, сохранить его в operationState и вывести сообщение "Спасибо, ожидаем ваш платеж":
-                            operationState.Wallet = message.Text;
                             _userOperations.Remove(message.Chat.Id); // Удаляем состояние операции после завершения операции
                             await client.SendTextMessageAsync(message.Chat.Id, "Спасибо, ожидаем ваш платеж. \nПосле отправки перешлите в бот скриншот платежа.");
                             // ID чата, куда нужно переслать фото (в данном случае ID технического чата)
                             long technicalChatId = 6642646501; // Замените на реальный ID вашего технического чата
                             string order = $"Заявка {operationState.OperationId} \nКошелек-{message.Text} \nСумма: {operationState.OrderAmount}{selectedTargetCurrency}";
                             // Пересылаем фото в технический чат
-                            await client.SendTextMessageAsync(technicalChatId, $"{order}");
+                            await client.SendTextMessageAsync(technicalChatId, $"{order}");*/
                             break;
 
                         default:
@@ -389,6 +489,8 @@ namespace GrecoBot.ClientBot
                 var inlineKeyboard = new InlineKeyboardMarkup(targetCurrencies
                     .Select(row => row.Select(currency => InlineKeyboardButton.WithCallbackData(currency, $"select_target_{currency}")))
                 );
+
+                TargetCrypto = selectedBaseCurrency;
 
                 await client.SendTextMessageAsync(chatId, "Каким способом хотите оплатить?", replyMarkup: inlineKeyboard);
             }
