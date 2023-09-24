@@ -669,6 +669,62 @@
           }
         }
       },
+      "NBitcoin/7.0.30": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "lib/net6.0/NBitcoin.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/NBitcoin.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Nethereum.Hex/4.16.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "[11.0.2, 14.0.0)"
+        },
+        "compile": {
+          "lib/net5.0/Nethereum.Hex.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.Hex.dll": {}
+        }
+      },
+      "Nethereum.RLP/4.16.0": {
+        "type": "package",
+        "dependencies": {
+          "Nethereum.Hex": "4.16.0",
+          "Newtonsoft.Json": "[11.0.2, 14.0.0)"
+        },
+        "compile": {
+          "lib/net5.0/Nethereum.RLP.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.RLP.dll": {}
+        }
+      },
+      "Nethereum.Util/4.16.0": {
+        "type": "package",
+        "dependencies": {
+          "Nethereum.Hex": "4.16.0",
+          "Nethereum.RLP": "4.16.0",
+          "Newtonsoft.Json": "[11.0.2, 14.0.0)"
+        },
+        "compile": {
+          "lib/net5.0/Nethereum.Util.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.Util.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
@@ -1813,6 +1869,90 @@
         "microsoft.openapi.nuspec"
       ]
     },
+    "NBitcoin/7.0.30": {
+      "sha512": "1lSytC46HzkJBz5jRBE9zFeiqBBAqVmfgsK8kCBJ9jhPjP4iplJ6gbIXi25Ar/AQDPPbzfX71Z2CmidAmt3cEw==",
+      "type": "package",
+      "path": "nbitcoin/7.0.30",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net472/NBitcoin.dll",
+        "lib/net472/NBitcoin.xml",
+        "lib/net6.0/NBitcoin.dll",
+        "lib/net6.0/NBitcoin.xml",
+        "lib/netstandard1.1/NBitcoin.dll",
+        "lib/netstandard1.1/NBitcoin.xml",
+        "lib/netstandard1.3/NBitcoin.dll",
+        "lib/netstandard1.3/NBitcoin.xml",
+        "lib/netstandard2.0/NBitcoin.dll",
+        "lib/netstandard2.0/NBitcoin.xml",
+        "lib/netstandard2.1/NBitcoin.dll",
+        "lib/netstandard2.1/NBitcoin.xml",
+        "nbitcoin.7.0.30.nupkg.sha512",
+        "nbitcoin.nuspec"
+      ]
+    },
+    "Nethereum.Hex/4.16.0": {
+      "sha512": "MhSO3PubstoKbXVfUkBaSg0+f+Sr4F5IBAMt9xL0bnACg4NQrGpzA2uVB7EGNHhSoCEVE6MJTxihwAY/kCimBw==",
+      "type": "package",
+      "path": "nethereum.hex/4.16.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "images/logo64x64.png",
+        "lib/net451/Nethereum.Hex.dll",
+        "lib/net461/Nethereum.Hex.dll",
+        "lib/net5.0/Nethereum.Hex.dll",
+        "lib/netcoreapp2.1/Nethereum.Hex.dll",
+        "lib/netcoreapp3.1/Nethereum.Hex.dll",
+        "lib/netstandard1.1/Nethereum.Hex.dll",
+        "lib/netstandard2.0/Nethereum.Hex.dll",
+        "nethereum.hex.4.16.0.nupkg.sha512",
+        "nethereum.hex.nuspec"
+      ]
+    },
+    "Nethereum.RLP/4.16.0": {
+      "sha512": "D2QLN1oZarRN+v6bN0kj8jwggkNOmgHohDgb1r/D58rC6Jy5kfUmiMlBBtCP1lzCFK+nGq2QTVFx+fDc3H1vhQ==",
+      "type": "package",
+      "path": "nethereum.rlp/4.16.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "images/logo64x64.png",
+        "lib/net451/Nethereum.RLP.dll",
+        "lib/net461/Nethereum.RLP.dll",
+        "lib/net5.0/Nethereum.RLP.dll",
+        "lib/netcoreapp2.1/Nethereum.RLP.dll",
+        "lib/netcoreapp3.1/Nethereum.RLP.dll",
+        "lib/netstandard1.1/Nethereum.RLP.dll",
+        "lib/netstandard2.0/Nethereum.RLP.dll",
+        "nethereum.rlp.4.16.0.nupkg.sha512",
+        "nethereum.rlp.nuspec"
+      ]
+    },
+    "Nethereum.Util/4.16.0": {
+      "sha512": "4Cg5zyzIHhmRv14OlNCuPXAn8LExDW6vKfoozc6pvfPge3swjAj0Ena7haXEiNN0a6QkPn5EeddHKbsElcWHYA==",
+      "type": "package",
+      "path": "nethereum.util/4.16.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "images/logo64x64.png",
+        "lib/net451/Nethereum.Util.dll",
+        "lib/net461/Nethereum.Util.dll",
+        "lib/net5.0/Nethereum.Util.dll",
+        "lib/netcoreapp2.1/Nethereum.Util.dll",
+        "lib/netcoreapp3.1/Nethereum.Util.dll",
+        "lib/netstandard1.1/Nethereum.Util.dll",
+        "lib/netstandard2.0/Nethereum.Util.dll",
+        "nethereum.util.4.16.0.nupkg.sha512",
+        "nethereum.util.nuspec"
+      ]
+    },
     "Newtonsoft.Json/13.0.3": {
       "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
       "type": "package",
@@ -2211,6 +2351,10 @@
       "GrecoBot.API >= 1.0.0",
       "GrecoBot.Core >= 1.0.0",
       "GrecoBot.DC >= 1.0.0",
+      "NBitcoin >= 7.0.30",
+      "Nethereum.Hex >= 4.16.0",
+      "Nethereum.RLP >= 4.16.0",
+      "Nethereum.Util >= 4.16.0",
       "Newtonsoft.Json >= 13.0.3",
       "Telegram.Bot >= 19.0.0",
       "Telegram.Bots.Extensions.Polling >= 5.9.0"
@@ -2271,6 +2415,22 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "NBitcoin": {
+            "target": "Package",
+            "version": "[7.0.30, )"
+          },
+          "Nethereum.Hex": {
+            "target": "Package",
+            "version": "[4.16.0, )"
+          },
+          "Nethereum.RLP": {
+            "target": "Package",
+            "version": "[4.16.0, )"
+          },
+          "Nethereum.Util": {
+            "target": "Package",
+            "version": "[4.16.0, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"

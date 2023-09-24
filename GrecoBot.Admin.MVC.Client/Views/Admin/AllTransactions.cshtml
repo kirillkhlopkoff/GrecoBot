@@ -1,29 +1,55 @@
-﻿@model List<GrecoBot.DC.TransactionDC>
+﻿@using GrecoBot.Data.Enums
+
+@model List<GrecoBot.Data.Models.Transaction>
 
 <h2>All Transactions</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>User Id</th>
-            <th>Transaction Id</th>
-            <th>Pair</th>
-            <th>Amount</th>
-            <th>Transaction Status</th>
-            <th>Date and Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var transaction in Model)
-        {
+@if (Model == null || Model.Count == 0)
+{
+    <p>No transactions available.</p>
+}
+else
+{
+    var sortedTransactions = Model.OrderByDescending(transaction => transaction.DateTime);
+    <table class="table">
+        <thead>
             <tr>
-                <td>@transaction.UserId</td>
-                <td>@transaction.TransactionId</td>
-                <td>@transaction.Pair</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.StatusTransaction</td>
-                <td>@transaction.DateTime</td>
+                <th>User Id</th>
+                <th>Transaction Id</th>
+                <th>Pair</th>
+                <th>Amount</th>
+                <th>Transaction Status</th>
+                <th>Date and Time</th>
+                <th>Update Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var transaction in sortedTransactions)
+            {
+                <tr>
+                    <td>@transaction.UserId</td>
+                    <td>@transaction.TransactionId</td>
+                    <td>@transaction.Pair</td>
+                    <td>@transaction.Amount</td>
+                    <td>@transaction.StatusTransaction</td>
+                    <td>@transaction.DateTime</td>
+                    <td>
+                        @if (transaction.StatusTransaction != StatusTransaction.transferred)
+                        {
+                            <form method="post" asp-action="UpdateTransactionStatus">
+                                <input type="hidden" name="transactionId" value="@transaction.TransactionId" />
+                                <select name="newStatus">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Transferred">Transferred</option>
+                                    <option value="Canceled">Canceled</option>
+                                </select>
+                                <button type="submit">Update Status</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -71,65 +71,6 @@ namespace GrecoBot.ClientBot
     // Add other exchange options and corresponding currency pairs here
 };
 
-        public static bool IsValidCryptoWallet(string wallet, string changePair)
-        {
-            switch (changePair.ToLower())
-            {
-                case "tether/usd":
-                    return Regex.IsMatch(wallet, @"^[A-Za-z0-9]{26,35}$");
-
-                case "bitcoin":
-                    return Regex.IsMatch(changePair, @"^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
-
-                case "ethereum":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "litecoin":
-                    return Regex.IsMatch(changePair, @"^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$");
-
-                case "cardano":
-                    return Regex.IsMatch(changePair, @"^[Aa][1-9a-km-zA-HJ-NP-Z]{58}$");
-
-                case "dai":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "tron/usd":
-                    return Regex.IsMatch(changePair, @"^T[a-zA-Z0-9]{33}$");
-
-                case "bitcoin-cash":
-                    return Regex.IsMatch(changePair, @"^bitcoincash:q[a-z0-9]{41}$");
-
-                case "binance-usd":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "tontoken":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "dash":
-                    return Regex.IsMatch(changePair, @"^X[a-km-zA-HJ-NP-Z1-9]{33}$");
-
-                case "verse-bitcoin":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "dogecoin":
-                    return Regex.IsMatch(changePair, @"^D{1}[5-9A-HJ-NP-U]{1}[1-9A-HJ-NP-Za-km-z]{32}$");
-
-                case "matic-network":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "binancecoin":
-                    return Regex.IsMatch(changePair, @"^bnb[a-zA-Z0-9]{38}$");
-
-                case "usd-coin":
-                    return Regex.IsMatch(changePair, @"^0x[a-fA-F0-9]{40}$");
-
-                case "monero":
-                    return Regex.IsMatch(changePair, @"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}$");
-
-                default:
-                    return false;
-            }
-        }
 
 
         public async Task RunBotAsync()
@@ -401,7 +342,7 @@ namespace GrecoBot.ClientBot
                             // Код обработки кошелька, например, сохранить его в operationState и вывести сообщение "Спасибо, ожидаем ваш платеж":
                             operationState.Wallet = message.Text;
                             string walletInput = message.Text;
-                            if (IsValidCryptoWallet(operationState.Wallet, changePair))
+                            if (CryptoWalletValidator.IsValidCryptoWallet(operationState.Wallet, changePair))
                             {
                                 var transactionModel = new TransactionDC
                                 {

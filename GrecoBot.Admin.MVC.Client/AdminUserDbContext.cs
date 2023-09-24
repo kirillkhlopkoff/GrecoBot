@@ -15,7 +15,7 @@ namespace GrecoBot.Admin.MVC.Client
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnectionAdmin"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

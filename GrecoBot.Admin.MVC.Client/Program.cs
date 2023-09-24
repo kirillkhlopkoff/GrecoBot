@@ -1,5 +1,6 @@
 using GrecoBot.Admin.MVC.Client;
 using GrecoBot.Admin.MVC.Client.Models;
+using GrecoBot.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -7,9 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionStringAdmin = builder.Configuration.GetConnectionString("DefaultConnectionAdmin");
 
 builder.Services.AddDbContext<AdminUserDbContext>(options =>
+{
+    options.LogTo(Console.WriteLine);
+    options.UseNpgsql(connectionStringAdmin);
+});
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.LogTo(Console.WriteLine);
     options.UseNpgsql(connectionString);

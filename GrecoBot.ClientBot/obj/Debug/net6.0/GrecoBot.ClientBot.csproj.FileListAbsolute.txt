@@ -55,3 +55,7 @@ D:\work\web\GrecoBot\GrecoBot.ClientBot\obj\Debug\net6.0\refint\GrecoBot.ClientB
 D:\work\web\GrecoBot\GrecoBot.ClientBot\obj\Debug\net6.0\GrecoBot.ClientBot.pdb
 D:\work\web\GrecoBot\GrecoBot.ClientBot\obj\Debug\net6.0\GrecoBot.ClientBot.genruntimeconfig.cache
 D:\work\web\GrecoBot\GrecoBot.ClientBot\obj\Debug\net6.0\ref\GrecoBot.ClientBot.dll
+D:\work\web\GrecoBot\GrecoBot.ClientBot\bin\Debug\net6.0\NBitcoin.dll
+D:\work\web\GrecoBot\GrecoBot.ClientBot\bin\Debug\net6.0\Nethereum.Hex.dll
+D:\work\web\GrecoBot\GrecoBot.ClientBot\bin\Debug\net6.0\Nethereum.RLP.dll
+D:\work\web\GrecoBot\GrecoBot.ClientBot\bin\Debug\net6.0\Nethereum.Util.dll

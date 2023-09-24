@@ -1,5 +1,7 @@
 ﻿using GrecoBot.Admin.MVC.Client.ViewModels.Transactions;
 using GrecoBot.Data;
+using GrecoBot.Data.Enums;
+using GrecoBot.Data.Models;
 using GrecoBot.DC;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +13,20 @@ namespace GrecoBot.Admin.MVC.Client.Controllers
     public class AdminController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly ApplicationDbContext _context;
 
-        public AdminController(HttpClient httpClient)
+        public AdminController(HttpClient httpClient, ApplicationDbContext context)
         {
             _httpClient = httpClient;
+            _context = context;
         }
 
         public async Task<IActionResult> AllTransactions()
         {
             try
             {
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.GetAsync("https://localhost:7135/api/main/all-transactions"); // Замените на вашу API URL
-                    response.EnsureSuccessStatusCode();
-
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var transactions = JsonConvert.DeserializeObject<List<TransactionDC>>(responseContent);
-
-                    return View(transactions);
-                }
+                var transactions = await _context.Transactions.ToListAsync();
+                return View(transactions);
             }
             catch (Exception ex)
             {
@@ -39,40 +35,37 @@ namespace GrecoBot.Admin.MVC.Client.Controllers
             }
         }
 
-        /*public async Task<IActionResult> AllTransactions()
+        [HttpPost]
+        public async Task<IActionResult> UpdateTransactionStatus(string transactionId, StatusTransaction newStatus)
         {
-            var client = _httpClient.CreateClient();
-            var response = await client.GetAsync("https://localhost:7135/api/main/all-transactions"); // Замените на вашу базовую URL API
+            try
+            {
+                // Проверьте, что transactionId не пустой
+                if (string.IsNullOrEmpty(transactionId))
+                {
+                    return BadRequest("Invalid transaction ID.");
+                }
 
-            if (response.IsSuccessStatusCode)
-            {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var transactions = JsonSerializer.Deserialize<List<TransactionInfoDC>>(responseBody);
-                return View(transactions);
+                // Поиск транзакции по ID в базе данных
+                var existingTransaction = await _context.Transactions.FirstOrDefaultAsync(t => t.TransactionId == transactionId);
+                if (existingTransaction == null)
+                {
+                    return NotFound("Transaction not found.");
+                }
+
+                // Обновление статуса транзакции
+                existingTransaction.StatusTransaction = newStatus;
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("AllTransactions");
             }
-            else
+            catch (Exception ex)
             {
-                // Обработка ошибки, если не удалось получить данные
+                Console.WriteLine($"An error occurred: {ex.Message}");
                 return View("Error");
             }
         }
 
-        public async Task<IActionResult> UserTransactions(long userId)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync($"https://localhost:7135/api/main/user-transactions/{userId}"); // Замените на вашу базовую URL API
 
-            if (response.IsSuccessStatusCode)
-            {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var transactions = JsonSerializer.Deserialize<List<TransactionInfoDC>>(responseBody);
-                return View(transactions);
-            }
-            else
-            {
-                // Обработка ошибки, если не удалось получить данные
-                return View("Error");
-            }
-        }*/
     }
 }

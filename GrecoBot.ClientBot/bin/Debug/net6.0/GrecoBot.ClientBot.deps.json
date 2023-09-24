@@ -11,6 +11,10 @@
           "GrecoBot.API": "1.0.0",
           "GrecoBot.Core": "1.0.0",
           "GrecoBot.DC": "1.0.0",
+          "NBitcoin": "7.0.30",
+          "Nethereum.Hex": "4.16.0",
+          "Nethereum.RLP": "4.16.0",
+          "Nethereum.Util": "4.16.0",
           "Newtonsoft.Json": "13.0.3",
           "Telegram.Bot": "19.0.0",
           "Telegram.Bots.Extensions.Polling": "5.9.0"
@@ -353,6 +357,54 @@
           "lib/netstandard2.0/Microsoft.OpenApi.dll": {
             "assemblyVersion": "1.2.3.0",
             "fileVersion": "1.2.3.0"
+          }
+        }
+      },
+      "NBitcoin/7.0.30": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net6.0/NBitcoin.dll": {
+            "assemblyVersion": "7.0.30.0",
+            "fileVersion": "7.0.30.0"
+          }
+        }
+      },
+      "Nethereum.Hex/4.16.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.Hex.dll": {
+            "assemblyVersion": "4.16.0.0",
+            "fileVersion": "4.16.0.0"
+          }
+        }
+      },
+      "Nethereum.RLP/4.16.0": {
+        "dependencies": {
+          "Nethereum.Hex": "4.16.0",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.RLP.dll": {
+            "assemblyVersion": "4.16.0.0",
+            "fileVersion": "4.16.0.0"
+          }
+        }
+      },
+      "Nethereum.Util/4.16.0": {
+        "dependencies": {
+          "Nethereum.Hex": "4.16.0",
+          "Nethereum.RLP": "4.16.0",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net5.0/Nethereum.Util.dll": {
+            "assemblyVersion": "4.16.0.0",
+            "fileVersion": "4.16.0.0"
           }
         }
       },
@@ -788,6 +840,34 @@
       "sha512": "sha512-Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw==",
       "path": "microsoft.openapi/1.2.3",
       "hashPath": "microsoft.openapi.1.2.3.nupkg.sha512"
+    },
+    "NBitcoin/7.0.30": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1lSytC46HzkJBz5jRBE9zFeiqBBAqVmfgsK8kCBJ9jhPjP4iplJ6gbIXi25Ar/AQDPPbzfX71Z2CmidAmt3cEw==",
+      "path": "nbitcoin/7.0.30",
+      "hashPath": "nbitcoin.7.0.30.nupkg.sha512"
+    },
+    "Nethereum.Hex/4.16.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MhSO3PubstoKbXVfUkBaSg0+f+Sr4F5IBAMt9xL0bnACg4NQrGpzA2uVB7EGNHhSoCEVE6MJTxihwAY/kCimBw==",
+      "path": "nethereum.hex/4.16.0",
+      "hashPath": "nethereum.hex.4.16.0.nupkg.sha512"
+    },
+    "Nethereum.RLP/4.16.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D2QLN1oZarRN+v6bN0kj8jwggkNOmgHohDgb1r/D58rC6Jy5kfUmiMlBBtCP1lzCFK+nGq2QTVFx+fDc3H1vhQ==",
+      "path": "nethereum.rlp/4.16.0",
+      "hashPath": "nethereum.rlp.4.16.0.nupkg.sha512"
+    },
+    "Nethereum.Util/4.16.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4Cg5zyzIHhmRv14OlNCuPXAn8LExDW6vKfoozc6pvfPge3swjAj0Ena7haXEiNN0a6QkPn5EeddHKbsElcWHYA==",
+      "path": "nethereum.util/4.16.0",
+      "hashPath": "nethereum.util.4.16.0.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",
