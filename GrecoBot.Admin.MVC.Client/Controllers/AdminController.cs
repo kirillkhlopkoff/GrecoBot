@@ -1,12 +1,8 @@
 ﻿using GrecoBot.Admin.MVC.Client.ViewModels.Transactions;
 using GrecoBot.Data;
 using GrecoBot.Data.Enums;
-using GrecoBot.Data.Models;
-using GrecoBot.DC;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Text.Json;
 
 namespace GrecoBot.Admin.MVC.Client.Controllers
 {
@@ -21,11 +17,28 @@ namespace GrecoBot.Admin.MVC.Client.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> AllTransactions()
+        public async Task<IActionResult> AllTransactions(long? userId, string pair)
         {
             try
             {
-                var transactions = await _context.Transactions.ToListAsync();
+                // Инициализируйте IQueryable для запроса в базу данных
+                var query = _context.Transactions.AsQueryable();
+
+                // Примените фильтрацию по UserId, если он задан
+                if (userId.HasValue)
+                {
+                    query = query.Where(t => t.UserId == userId.Value);
+                }
+
+                // Примените фильтрацию по Pair, если он задан
+                if (!string.IsNullOrEmpty(pair))
+                {
+                    query = query.Where(t => t.Pair == pair);
+                }
+
+                // Получите отсортированные транзакции
+                var transactions = await query.OrderByDescending(transaction => transaction.DateTime).ToListAsync();
+
                 return View(transactions);
             }
             catch (Exception ex)

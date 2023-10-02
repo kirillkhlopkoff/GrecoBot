@@ -200,30 +200,26 @@ namespace GrecoBot.ClientBot
 
             // Применяем правила комиссии
             decimal commissionRate = 0;
-            if (totalAmountInUSD < 100)
+            if (totalAmountInUSD < 10)
             {
-                commissionRate = 0.35m; // 35%
+                commissionRate = 0.1m; // 10%
             }
-            else if (totalAmountInUSD >= 100 && totalAmountInUSD < 500)
+            else if (totalAmountInUSD >= 10 && totalAmountInUSD < 50)
             {
-                commissionRate = 0.3m; // 30%
+                commissionRate = 0.05m; // 5%
+            }
+            else if (totalAmountInUSD >= 50 && totalAmountInUSD < 200)
+            {
+                commissionRate = 0.1m; // 10%
+            }
+
+            if (totalAmountInUSD >= 200 && totalAmountInUSD < 500)
+            {
+                commissionRate = 0.1m; // 10%
             }
             else if (totalAmountInUSD >= 500)
             {
-                commissionRate = 0.25m; // 25%
-            }
-
-            if (totalAmountInUAH < 100)
-            {
-                commissionRate = 0.35m; // 35%
-            }
-            else if (totalAmountInUAH >= 100 && totalAmountInUAH < 500)
-            {
-                commissionRate = 0.3m; // 30%
-            }
-            else if (totalAmountInUAH >= 500)
-            {
-                commissionRate = 0.25m; // 25%
+                commissionRate = 0.15m; // 15%
             }
 
             // Вычисляем комиссию и добавляем ее к итоговой сумме
@@ -231,6 +227,25 @@ namespace GrecoBot.ClientBot
             decimal commissionAmountUAH = totalAmountInUAH * commissionRate;
             decimal totalAmountAfterCommissionUSD = totalAmountInUSD + commissionAmountUSD;
             decimal totalAmountAfterCommissionUAH = totalAmountInUAH + commissionAmountUAH;
+            if (totalAmountInUSD >= 10 && totalAmountInUSD < 50)
+            {
+                totalAmountAfterCommissionUAH += 1m * exchangeFiatRate; // 1$
+            }
+            else if (totalAmountInUSD >= 50 && totalAmountInUSD < 200)
+            {
+                totalAmountAfterCommissionUAH += 2m * exchangeFiatRate; // 2$
+            }
+
+            if (totalAmountInUSD >= 200 && totalAmountInUSD < 500)
+            {
+                totalAmountAfterCommissionUAH += 5m * exchangeFiatRate; // 5$
+            }
+            else if (totalAmountInUSD >= 500)
+            {
+                totalAmountAfterCommissionUAH += 10m * exchangeFiatRate; // 10$
+            }
+
+
             decimal totalAmountAfterCommissionUSDT = totalAmountInUSDT + commissionAmountUSD;
 
             // Преобразуем округленные значения в строки для отправки в сообщения

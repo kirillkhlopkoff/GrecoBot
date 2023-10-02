@@ -3,14 +3,6 @@ using GrecoBot.ClientBot.Methods;
 using GrecoBot.Core;
 using GrecoBot.DC;
 using Newtonsoft.Json;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -205,7 +197,7 @@ namespace GrecoBot.ClientBot
             {
                 try
                 {
-                    var response = await _httpClient.GetAsync("https://localhost:7135/api/Bot/crypto-currency-rates");
+                    var response = await _httpClient.GetAsync("https://localhost:7135/api/Main/crypto-currency-rates");
                     response.EnsureSuccessStatusCode();
 
                     var content = await response.Content.ReadAsStringAsync();
@@ -368,26 +360,6 @@ namespace GrecoBot.ClientBot
                                 // Выводим сообщение о некорректном формате кошелька
                                 await client.SendTextMessageAsync(message.Chat.Id, "Некорректный формат крипто-кошелька. Пожалуйста, введите корректный кошелек.");
                             }
-
-
-                            /*var transactionModel = new TransactionDC
-                            {
-                                UserId = message.Chat.Id,
-                                TransactionId = operationState.OperationId,
-                                Pair = changePair,
-                                Amount = operationState.Amount,
-                                DateTime = DateTime.Now,
-                            };
-
-                            await _botMethods.CreateTransactionInApi(transactionModel); // Создаем транзакцию в базе данных
-
-                            _userOperations.Remove(message.Chat.Id); // Удаляем состояние операции после завершения операции
-                            await client.SendTextMessageAsync(message.Chat.Id, "Спасибо, ожидаем ваш платеж. \nПосле отправки перешлите в бот скриншот платежа.");
-                            // ID чата, куда нужно переслать фото (в данном случае ID технического чата)
-                            long technicalChatId = 6642646501; // Замените на реальный ID вашего технического чата
-                            string order = $"Заявка {operationState.OperationId} \nКошелек-{message.Text} \nСумма: {operationState.OrderAmount}{selectedTargetCurrency}";
-                            // Пересылаем фото в технический чат
-                            await client.SendTextMessageAsync(technicalChatId, $"{order}");*/
                             break;
 
                         default:
