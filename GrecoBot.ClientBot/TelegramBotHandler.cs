@@ -17,6 +17,7 @@ namespace GrecoBot.ClientBot
         {
             SelectTargetCurrency,
             EnterAmount,
+            ChooseBank,
             EnterWallet
         }
 
@@ -298,7 +299,17 @@ namespace GrecoBot.ClientBot
             }
             else if (message.Text == "📖 Оферта")
             {
-                await _client.SendTextMessageAsync(message.Chat.Id, $"Договор оферты, комиссия и прочее");
+                string buttonText = message.Text == "📖 Оферта" ? "Договор Оферты" : "Перейти";
+                string buttonUrl = "https://teletype.in/@grekkh/terms"; // Здесь URL, на оферту
+
+                var supportButton = new InlineKeyboardButton(buttonText)
+                {
+                    Url = buttonUrl
+                };
+
+                var inlineKeyboard = new InlineKeyboardMarkup(new[] { new[] { supportButton } });
+
+                await client.SendTextMessageAsync(message.Chat.Id, "Для просмотра договора оферты нажмите на кнопку ниже:", replyMarkup: inlineKeyboard);
             }
 
             else
@@ -307,7 +318,9 @@ namespace GrecoBot.ClientBot
                 if (_userOperations.TryGetValue(message.Chat.Id, out var operationState))
                 {
                     string walletUAH = "4149 6293 5338 5008";
-                    
+                    string Monobank = "mono 4149 6293 5338 5008";
+                    string PrivatBank = "privat 4149 6293 5338 5008";
+
 
                     switch (operationState.CurrentStep)
                     {
@@ -316,17 +329,55 @@ namespace GrecoBot.ClientBot
                             if (decimal.TryParse(message.Text, out decimal amount))
                             {
                                 operationState.Amount = amount;
-                                operationState.CurrentStep = OperationStep.EnterWallet;
+                                operationState.CurrentStep = OperationStep.ChooseBank;
 
-                                await client.SendTextMessageAsync(message.Chat.Id, $"Вы хотите купить {message.Text} {TargetCrypto} \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{walletUAH} \nследующую сумму:");
+                                // Отправляем сообщение с кнопками выбора банка
+                                var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[]
+                                {
+                                    new KeyboardButton[]{new KeyboardButton("Монобанк"),new KeyboardButton("Приватбанк"),},
+                                    new KeyboardButton[]{new KeyboardButton("В меню")}
 
-                                // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
-                                await _currentCourse.CalculateAmountInUSD(message.Chat.Id, message.Text, changePair, "uah");
-                                operationState.OrderAmount = message.Text;
+                            });
+                                replyKeyboardMarkup.OneTimeKeyboard = true; // Отобразить клавиатуру только один раз
+                                await client.SendTextMessageAsync(message.Chat.Id, "Выберите банк для оплаты:", replyMarkup: replyKeyboardMarkup);
+                            }
+                            else if (message.Text == "В меню")
+                            {
+                                operationState.CurrentStep = OperationStep.SelectTargetCurrency;
+                                var keyboard = Keyboards.MainKeyboard(); // Используем метод из класса Keyboards
+                                await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
                             }
                             else
                             {
                                 await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите корректную сумму.");
+                            }
+                            break;
+
+                        case OperationStep.ChooseBank:
+                            if (message.Text == "Монобанк" || message.Text == "Приватбанк")
+                            {
+                                string selectedBank = message.Text;
+
+                                // Выбираем соответствующий номер карты
+                                string bankCardNumber = selectedBank == "Монобанк" ? Monobank : PrivatBank;
+
+                                await client.SendTextMessageAsync(message.Chat.Id, $"Вы выбрали {selectedBank}. \nId вашей операции:{operationState.OperationId}. \nУкажите его в назначении платежа. \n\nВведите ваш кошелек для зачисления. \nИ отправьте на карту \n{bankCardNumber} \nследующую сумму:");
+                                // Рассчитать итоговую сумму на основе выбранной криптовалюты и введенной суммы
+                                await _currentCourse.CalculateAmountInUSD(message.Chat.Id, operationState.Amount.ToString(), changePair, "uah");
+                                operationState.OrderAmount = operationState.Amount.ToString();
+                                operationState.CurrentStep = OperationStep.EnterWallet;
+
+                                
+                            }
+                            else if (message.Text == "В меню")
+                            {
+                                operationState.CurrentStep = OperationStep.SelectTargetCurrency;
+                                var keyboard = Keyboards.MainKeyboard(); // Используем метод из класса Keyboards
+                                await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
+                            }
+                            else
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, выберите банк, нажав на соответствующую кнопку.");
                             }
                             break;
 
@@ -354,6 +405,12 @@ namespace GrecoBot.ClientBot
                                 string order = $"Заявка {operationState.OperationId} \nКошелек-{message.Text} \nСумма: {operationState.OrderAmount}{changePair}";
                                 // Пересылаем фото в технический чат
                                 await client.SendTextMessageAsync(technicalChatId, $"{order}");
+                            }
+                            else if (message.Text == "В меню")
+                            {
+                                operationState.CurrentStep = OperationStep.SelectTargetCurrency;
+                                var keyboard = Keyboards.MainKeyboard(); // Используем метод из класса Keyboards
+                                await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
                             }
                             else
                             {
