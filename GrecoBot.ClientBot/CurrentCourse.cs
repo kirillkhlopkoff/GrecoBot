@@ -130,18 +130,29 @@ namespace GrecoBot.ClientBot
             }
         }
 
-        private decimal GetExchangeRate(string selectedCurrencyPair)
+        public async Task<decimal> GetExchangeRate(string selectedCurrencyPair)
         {
-            if (_data.TryGetValue(selectedCurrencyPair.Split('/')[0].ToLower(), out var currencyData))
+            try
             {
-                if (currencyData.TryGetValue("usd", out decimal exchangeRate))
+                if (_data == null) //создаем объект с курсами
                 {
-                    return exchangeRate;
+                    await LoadCryptoCurrencyRates();
                 }
+                if (_data.TryGetValue(selectedCurrencyPair.Split('/')[0].ToLower(), out var currencyData))
+                {
+                    if (currencyData.TryGetValue("usd", out decimal exchangeRate))
+                    {
+                        return exchangeRate;
+                    }
+                }
+                return 0;
             }
-
-            // Если валютная пара или курс обмена не найдены, можно вернуть значение по умолчанию или обработать ошибку
-            return 0;
+            catch(Exception ex)
+            {
+                // Если валютная пара или курс обмена не найдены, можно вернуть значение по умолчанию или обработать ошибку
+                return 0;
+            }
+            
         }
 
         private decimal GetFiatExchangeRate(string currencyCode)
@@ -184,7 +195,7 @@ namespace GrecoBot.ClientBot
             }
 
             // Получаем текущий курс выбранной валютной пары
-            decimal exchangeRate = GetExchangeRate(selectedCurrencyPair);
+            decimal exchangeRate = await GetExchangeRate(selectedCurrencyPair);
 
             decimal exchangeFiatRate = GetFiatExchangeRate(selectedCurrencyPair.Split('/')[1].ToLower());
 

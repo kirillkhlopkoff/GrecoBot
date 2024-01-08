@@ -379,3 +379,7 @@ D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\obj\Debug\net6.0\refint\GrecoBot.
 D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\obj\Debug\net6.0\GrecoBot.Admin.MVC.Client.pdb
 D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\obj\Debug\net6.0\GrecoBot.Admin.MVC.Client.genruntimeconfig.cache
 D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\obj\Debug\net6.0\ref\GrecoBot.Admin.MVC.Client.dll
+D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\bin\Debug\net6.0\refs\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Identity.Core.dll
+D:\work\web\GrecoBot\GrecoBot.Admin.MVC.Client\bin\Debug\net6.0\refs\Microsoft.Extensions.Identity.Stores.dll

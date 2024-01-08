@@ -184,6 +184,9 @@ namespace GrecoBot.ClientBot
 
         async Task HandleMessage(ITelegramBotClient client, Message message)
         {
+            CurrentCourse currentCourse = new CurrentCourse();
+            //decimal currentRate = currentCourse.GetExchangeRate(changePair);
+            decimal minimalRate = 2;// 2$
             if (message == null)
             {
                 await client.SendTextMessageAsync(message.Chat.Id, "Неизвестная команда.");
@@ -328,18 +331,26 @@ namespace GrecoBot.ClientBot
                         case OperationStep.EnterAmount:
                             if (decimal.TryParse(message.Text, out decimal amount))
                             {
+                                decimal currentRate = await currentCourse.GetExchangeRate(changePair);
                                 operationState.Amount = amount;
-                                operationState.CurrentStep = OperationStep.ChooseBank;
-
-                                // Отправляем сообщение с кнопками выбора банка
-                                var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[]
+                                    
+                                if ((operationState.Amount * currentRate) >= minimalRate)
                                 {
+                                    operationState.CurrentStep = OperationStep.ChooseBank;
+                                    // Отправляем сообщение с кнопками выбора банка
+                                    var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[]
+                                    {
                                     new KeyboardButton[]{new KeyboardButton("Монобанк"),new KeyboardButton("Приватбанк"),},
                                     new KeyboardButton[]{new KeyboardButton("В меню")}
 
                             });
-                                replyKeyboardMarkup.OneTimeKeyboard = true; // Отобразить клавиатуру только один раз
-                                await client.SendTextMessageAsync(message.Chat.Id, "Выберите банк для оплаты:", replyMarkup: replyKeyboardMarkup);
+                                    replyKeyboardMarkup.OneTimeKeyboard = true; // Отобразить клавиатуру только один раз
+                                    await client.SendTextMessageAsync(message.Chat.Id, "Выберите банк для оплаты:", replyMarkup: replyKeyboardMarkup);
+                                }
+                                else
+                                {
+                                    await client.SendTextMessageAsync(message.Chat.Id, "Минимальная сумма 2$");
+                                }
                             }
                             else if (message.Text == "В меню")
                             {
@@ -478,7 +489,8 @@ namespace GrecoBot.ClientBot
                     if (CurrencyPairMappings.TryGetValue(selectedTargetCurrency, out var _changePair))
                     {
                         await responseConsoleMessage;
-                        await client.SendTextMessageAsync(chatId, $"Выбрана валютная пара: {_changePair}");
+                        //await client.SendTextMessageAsync(chatId, $"Выбрана валютная пара: {_changePair}"); //тут имеет смысл указывать пару, когда разные валюты, пока что только гривна
+                        await client.SendTextMessageAsync(chatId, $"Выбрана валютная пара: {selectedTargetCurrency}");
                         changePair = _changePair;
                     }
                     else
