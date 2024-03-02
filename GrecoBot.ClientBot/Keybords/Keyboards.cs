@@ -11,7 +11,19 @@ namespace GrecoBot.ClientBot.Keybords
             new KeyboardButton[] { new KeyboardButton("💶 Обменять"), new KeyboardButton("👤 Личный кабинет") },
             new KeyboardButton[] { new KeyboardButton("💬 Сообщество"), new KeyboardButton("📞 Поддержка") },
             new KeyboardButton[] { new KeyboardButton("⚖️ Текущий курс"), new KeyboardButton("✅ Регистрация") },
-            new KeyboardButton[] { new KeyboardButton("📖 Оферта") }
+            new KeyboardButton[] { new KeyboardButton("📖 Оферта"), new KeyboardButton("👥 Реферальная программа") }
+        })
+            {
+                ResizeKeyboard = true
+            };
+        }
+
+        public static ReplyKeyboardMarkup ReferalKeyboard()
+        {
+            return new ReplyKeyboardMarkup(new[]
+            {
+            new KeyboardButton[] { new KeyboardButton("📥 Ввести реферальный код"), new KeyboardButton("📤 Получить реферальный код") },
+            new KeyboardButton[] { new KeyboardButton("🔙 Главное меню") },
         })
             {
                 ResizeKeyboard = true

@@ -3,6 +3,7 @@ using GrecoBot.ClientBot.Methods;
 using GrecoBot.Core;
 using GrecoBot.DC;
 using Newtonsoft.Json;
+using System.Buffers;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -15,6 +16,8 @@ namespace GrecoBot.ClientBot
     {
         public enum OperationStep
         {
+            None,
+            EnterReferalCode,
             SelectTargetCurrency,
             EnterAmount,
             ChooseBank,
@@ -197,6 +200,11 @@ namespace GrecoBot.ClientBot
                 var keyboard = Keyboards.MainKeyboard(); // Используем метод из класса Keyboards
                 await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
             }
+            else if (message.Text == "🔙 Главное меню")
+            {
+                var keyboard = Keyboards.MainKeyboard();
+                await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
+            }
             else if (message.Text == "⚖️ Текущий курс")
             {
                 try
@@ -314,6 +322,53 @@ namespace GrecoBot.ClientBot
 
                 await client.SendTextMessageAsync(message.Chat.Id, "Для просмотра договора оферты нажмите на кнопку ниже:", replyMarkup: inlineKeyboard);
             }
+            else if (message.Text == "👥 Реферальная программа")
+            {
+                // Получаем информацию о пользователе и его транзакциях из API
+                var userInfoWithTransactions = await _botMethods.GetUserInfoFromApi(message.Chat.Id);
+
+                if (userInfoWithTransactions.UserInfo != null)
+                {
+                    var keyboard = Keyboards.ReferalKeyboard();
+                    await _client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: keyboard);
+                }
+                else
+                {
+                    await _client.SendTextMessageAsync(message.Chat.Id, "Вы еще не зарегистрированы.");
+                }
+            }
+            else if (message.Text == "📤 Получить реферальный код")
+            {
+                string referalCode = "GBRFC";
+                referalCode += message.Chat.Id;
+                await _client.SendTextMessageAsync(message.Chat.Id, $"Ваш реферальный код: {referalCode}\nВы можете передать его вашим друзьям и получать бонусы за их транзакции.");
+            }
+            else if (message.Text == "📥 Ввести реферальный код")
+            {
+                // Получаем информацию о пользователе и его транзакциях из API
+                var userInfoWithTransactions = await _botMethods.GetUserInfoFromApi(message.Chat.Id);
+
+                if (userInfoWithTransactions.UserInfo != null)
+                {
+                    var operationState = new OperationState();
+                    if (operationState.CurrentStep != OperationStep.EnterReferalCode)
+                    {
+                        await _client.SendTextMessageAsync(message.Chat.Id, "Введите ваш реферальный код");
+                        operationState.CurrentStep = OperationStep.EnterReferalCode;
+                        _userOperations[message.Chat.Id] = operationState;
+                    }
+                    else
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, вернитесь в меню.");
+                        operationState.CurrentStep = OperationStep.SelectTargetCurrency;
+                    }
+                }
+                else
+                {
+                    // Пользователь не найден, отправляем сообщение о незарегистрированности
+                    await _client.SendTextMessageAsync(message.Chat.Id, "Вы еще не зарегистрированы.");
+                }
+            }
 
             else
             {
@@ -327,6 +382,19 @@ namespace GrecoBot.ClientBot
 
                     switch (operationState.CurrentStep)
                     {
+                        case OperationStep.EnterReferalCode:
+                            string referalCode = message.Text;
+                            bool addReferalCode = await _botMethods.AddReferalCode(referalCode, message.Chat.Id);
+                            if(addReferalCode)
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Ваш реферальный код активирован.");
+                                operationState.CurrentStep = OperationStep.SelectTargetCurrency;
+                            }
+                            else
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите корректный реферальный код.");
+                            }
+                            break;
 
                         case OperationStep.EnterAmount:
                             if (decimal.TryParse(message.Text, out decimal amount))

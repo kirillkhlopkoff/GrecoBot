@@ -66,6 +66,13 @@ namespace GrecoBot.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ReferalCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("SummOfTransactions")
+                        .HasColumnType("numeric");
+
                     b.HasKey("Id");
 
                     b.ToTable("User");

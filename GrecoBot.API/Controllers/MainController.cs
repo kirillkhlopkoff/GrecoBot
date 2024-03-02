@@ -49,6 +49,34 @@ namespace GrecoBot.API.Controllers
             return Ok("User registered successfully.");
         }
 
+        [HttpPost("addReferalCode")]
+        public async Task<IActionResult> AddReferalCode(long userId, string referalCode)
+        {
+            try
+            {
+                var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
+                {
+                    user.ReferalCode = referalCode;
+                }
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return Ok("Referal code added successfully.");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, "Internal server error: " + ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+
+        }
+
+
         [HttpGet("user-info/{userId}")]
         public async Task<IActionResult> GetUserInfo(long userId)
         {
@@ -61,7 +89,8 @@ namespace GrecoBot.API.Controllers
                     var userInfo = new UserDC
                     {
                         Id = user.Id,
-                        Phone = user.Phone
+                        Phone = user.Phone,
+                        ReferalCode = user.ReferalCode
                     };
 
                     var transactions = await _dbContext.Transactions

@@ -72,6 +72,46 @@ namespace GrecoBot.ClientBot.Methods
             }
         }
 
+        public async Task<bool> AddReferalCode(string referalCode, long userId)
+        {
+            try
+            {
+                const string prefix = "GBRFC";
+
+                if (referalCode.StartsWith(prefix) && referalCode.Length > prefix.Length)
+                {
+                    string referalUserId = referalCode.Substring(prefix.Length);
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        var responseInfo = await httpClient.GetAsync($"https://localhost:7135/api/main/user-info/{referalUserId}");
+                        if (responseInfo.IsSuccessStatusCode && (userId.ToString() != referalUserId))
+                        {
+                            var response = await httpClient.PostAsync($"https://localhost:7135/api/main/addReferalCode?userId={userId}&referalCode={referalCode}", null);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                return true;
+                            }
+                            return false;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
         public async Task<string> CreateTransactionInApi(TransactionDC transactionModel)
         {
             try

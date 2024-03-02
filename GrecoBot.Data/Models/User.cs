@@ -10,5 +10,7 @@ namespace GrecoBot.Data.Models
     {
         public long Id { get; set; }
         public string Phone { get; set; }
+        public string ReferalCode { get; set; }
+        public decimal SummOfTransactions { get; set; }
     }
 }
